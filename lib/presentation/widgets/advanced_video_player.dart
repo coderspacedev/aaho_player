@@ -39,7 +39,7 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
 
   Future<void> _initializePlayer() async {
     final videoUrl = 'https://www.googleapis.com/drive/v3/files/${widget.fileId}?alt=media&key=AIzaSyBkFT8hgzdDb0Nd7RHDRk9IMUWypfJTifE';
-    _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+    _controller = VideoPlayerController.networkUrl(Uri.parse('https://archive.org/download/big-buck-bunny_202510/BigBuckBunny.mp4'));
     await _controller.initialize();
     await _controller.setVolume(_volume);
     await _controller.play();
