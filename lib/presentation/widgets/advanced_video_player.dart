@@ -6,9 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 
 class AdvancedVideoPlayer extends StatefulWidget {
-  final String fileId;
+  final String videoUrl;
 
-  const AdvancedVideoPlayer({super.key, required this.fileId});
+  const AdvancedVideoPlayer({super.key, required this.videoUrl});
 
   @override
   State<AdvancedVideoPlayer> createState() => _AdvancedVideoPlayerState();
@@ -23,7 +23,8 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
   Timer? _hideTimer;
 
   double _volume = 1.0;
-  double _brightness = 1.0; // 0.0 to 1.0, actual system control requires a package like hardware_brightness
+  double _brightness =
+      1.0; // 0.0 to 1.0, actual system control requires a package like hardware_brightness
   bool _isDragging = false;
   bool _isBrightnessDrag = false;
   Offset _dragStartPosition = Offset.zero;
@@ -38,8 +39,8 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
   }
 
   Future<void> _initializePlayer() async {
-    final videoUrl = 'https://www.googleapis.com/drive/v3/files/${widget.fileId}?alt=media&key=AIzaSyBkFT8hgzdDb0Nd7RHDRk9IMUWypfJTifE';
-    _controller = VideoPlayerController.networkUrl(Uri.parse('https://archive.org/download/big-buck-bunny_202510/BigBuckBunny.mp4'));
+    // final videoUrl = 'https://www.googleapis.com/drive/v3/files/${widget.fileId}?alt=media&key=AIzaSyBkFT8hgzdDb0Nd7RHDRk9IMUWypfJTifE';
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
     await _controller.initialize();
     await _controller.setVolume(_volume);
     await _controller.play();
@@ -108,7 +109,9 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
       // Left side: seek backward
       final position = _controller.value.position;
       final newPosition = position - const Duration(seconds: 10);
-      _controller.seekTo(newPosition > Duration.zero ? newPosition : Duration.zero);
+      _controller.seekTo(
+        newPosition > Duration.zero ? newPosition : Duration.zero,
+      );
     } else if (x > 2 * screenSize.width / 3) {
       // Right side: seek forward
       final position = _controller.value.position;
@@ -125,7 +128,9 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
 
   Orientation _getOrientation() {
     final size = MediaQuery.of(context).size;
-    return size.width > size.height ? Orientation.landscape : Orientation.portrait;
+    return size.width > size.height
+        ? Orientation.landscape
+        : Orientation.portrait;
   }
 
   void _handleVerticalDragStart(DragStartDetails details) {
@@ -146,7 +151,11 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
   }
 
   void _handleVerticalDragUpdate(DragUpdateDetails details) {
-    final delta = details.delta.dy / MediaQuery.of(context).size.height; // Normalize, but since vertical, use dy
+    final delta =
+        details.delta.dy /
+        MediaQuery.of(
+          context,
+        ).size.height; // Normalize, but since vertical, use dy
     setState(() {
       if (_isBrightnessDrag) {
         _brightness = (_brightness - delta).clamp(0.0, 1.0);
@@ -192,198 +201,236 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: _controller.value.isInitialized
-          ? GestureDetector(
-        onTap: () {
-          if (_showControls) {
-            _startHideTimer();
-          } else {
-            _showAndHideControls();
-          }
-        },
-        onDoubleTapDown: _handleDoubleTapDown,
-        onVerticalDragStart: _handleVerticalDragStart,
-        onVerticalDragUpdate: _handleVerticalDragUpdate,
-        onVerticalDragEnd: _handleVerticalDragEnd,
-        child: Stack(
-          children: [
-            Center(
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: SizedBox(
-                  width: _controller.value.size.width,
-                  height: _controller.value.size.height,
-                  child: VideoPlayer(_controller),
-                ),
-              ),
-            ),
-            // Top bar (former AppBar)
-            if (_showControls)
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  height: orientation == Orientation.portrait ? 56.0 : 40.0,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.black87, Colors.transparent],
+          ? Stack(
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    if (_showControls) {
+                      _startHideTimer();
+                    } else {
+                      _showAndHideControls();
+                    }
+                  },
+                  onDoubleTapDown: _handleDoubleTapDown,
+                  onVerticalDragStart: _handleVerticalDragStart,
+                  onVerticalDragUpdate: _handleVerticalDragUpdate,
+                  onVerticalDragEnd: _handleVerticalDragEnd,
+                  child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: SizedBox(
+                        width: _controller.value.size.width,
+                        height: _controller.value.size.height,
+                        child: VideoPlayer(_controller),
+                      ),
                     ),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: orientation == Orientation.portrait ? 16.0 : 8.0),
-                  child: SafeArea(
+                ),
+
+                // Top bar (former AppBar)
+                if (_showControls)
+                  IgnorePointer(
+                    ignoring: false,
+                    child: _buildTopBar(context, orientation),
+                  ),
+                // Centered play/pause button and seek buttons
+                if (_showControls && orientation == Orientation.portrait)
+                  Center(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.arrow_back, color: Colors.white, size: 24),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        if (orientation == Orientation.portrait)
-                          const Text(
-                            'Video Player',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        IconButton(
-                          icon: Icon(
-                            _isFullscreen ? Icons.fullscreen_exit : Icons.fullscreen,
+                          onPressed: () {
+                            _showAndHideControls();
+                            final position = _controller.value.position;
+                            final newPosition =
+                                position - const Duration(seconds: 10);
+                            _controller.seekTo(
+                              newPosition > Duration.zero
+                                  ? newPosition
+                                  : Duration.zero,
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.replay_10,
                             color: Colors.white,
-                            size: 24,
+                            size: 32,
                           ),
-                          onPressed: _toggleFullscreen,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.1,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            _showAndHideControls();
+                            setState(() {
+                              _controller.value.isPlaying
+                                  ? _controller.pause()
+                                  : _controller.play();
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black.withOpacity(0.5),
+                            ),
+                            child: Icon(
+                              _controller.value.isPlaying
+                                  ? Icons.pause
+                                  : Icons.play_arrow,
+                              color: Colors.white,
+                              size: 60,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.1,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            _showAndHideControls();
+                            final position = _controller.value.position;
+                            final duration = _controller.value.duration;
+                            final newPosition =
+                                position + const Duration(seconds: 10);
+                            _controller.seekTo(
+                              newPosition < duration ? newPosition : duration,
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.forward_10,
+                            color: Colors.white,
+                            size: 32,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ),
-            // Centered play/pause button and seek buttons
-            if (_showControls && orientation == Orientation.portrait)
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        _showAndHideControls();
-                        final position = _controller.value.position;
-                        final newPosition = position - const Duration(seconds: 10);
-                        _controller.seekTo(newPosition > Duration.zero ? newPosition : Duration.zero);
-                      },
-                      icon: const Icon(Icons.replay_10, color: Colors.white, size: 32),
-                    ),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.1),
-                    GestureDetector(
-                      onTap: () {
-                        _showAndHideControls();
-                        setState(() {
-                          _controller.value.isPlaying ? _controller.pause() : _controller.play();
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                        child: Icon(
-                          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                          color: Colors.white,
-                          size: 60,
-                        ),
+                // Drag overlay (visual feedback for volume/brightness)
+                if (_showControls && _isDragging)
+                  Positioned(
+                    left: _getOverlayLeft(),
+                    top: math.max(_dragStartPosition.dy - 40, 0),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                    ),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.1),
-                    IconButton(
-                      onPressed: () {
-                        _showAndHideControls();
-                        final position = _controller.value.position;
-                        final duration = _controller.value.duration;
-                        final newPosition = position + const Duration(seconds: 10);
-                        _controller.seekTo(newPosition < duration ? newPosition : duration);
-                      },
-                      icon: const Icon(Icons.forward_10, color: Colors.white, size: 32),
-                    ),
-                  ],
-                ),
-              ),
-            // Drag overlay (visual feedback for volume/brightness)
-            if (_showControls && _isDragging)
-              Positioned(
-                left: _getOverlayLeft(),
-                top: math.max(_dragStartPosition.dy - 40, 0),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        _isBrightnessDrag ? Icons.brightness_medium : Icons.volume_up,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                      Text(
-                        '${(_isBrightnessDrag ? _brightness : _volume) * 100.round()}%',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            // Bottom controls overlay
-            if (_showControls)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, Colors.black.withOpacity(0.8)],
-                    ),
-                  ),
-                  padding: EdgeInsets.all(orientation == Orientation.portrait ? 20.0 : 12.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        child: VideoProgressIndicator(
-                          _controller,
-                          allowScrubbing: true,
-                          padding: EdgeInsets.zero,
-                        ),
-                      ),
-                      SizedBox(height: orientation == Orientation.portrait ? 10.0 : 6.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            _formatDuration(_controller.value.position),
-                            style: const TextStyle(color: Colors.white),
+                          Icon(
+                            _isBrightnessDrag
+                                ? Icons.brightness_medium
+                                : Icons.volume_up,
+                            color: Colors.white,
+                            size: 24,
                           ),
-                          const Spacer(),
                           Text(
-                            _formatDuration(_controller.value.duration),
+                            '${(_isBrightnessDrag ? _brightness : _volume) * 100.round()}%',
                             style: const TextStyle(color: Colors.white),
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                // Bottom controls overlay
+                if (_showControls)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withOpacity(0.8),
+                          ],
+                        ),
+                      ),
+                      padding: EdgeInsets.all(
+                        orientation == Orientation.portrait ? 20.0 : 12.0,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: VideoProgressIndicator(
+                              _controller,
+                              allowScrubbing: true,
+                              padding: EdgeInsets.zero,
+                            ),
+                          ),
+                          SizedBox(
+                            height: orientation == Orientation.portrait
+                                ? 10.0
+                                : 6.0,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                _formatDuration(_controller.value.position),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              const Spacer(),
+                              Text(
+                                _formatDuration(_controller.value.duration),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            )
+          : const Center(child: CircularProgressIndicator(color: Colors.white)),
+    );
+  }
+
+  Widget _buildTopBar(BuildContext context, Orientation orientation) {
+    return Container(
+      height: orientation == Orientation.portrait ? 56.0 : 40.0,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.black87, Colors.transparent],
+        ),
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: orientation == Orientation.portrait ? 16.0 : 8.0,
+      ),
+      child: SafeArea(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white, size: 24),
+              onPressed: () => Navigator.pop(context),
+            ),
+            if (orientation == Orientation.portrait)
+              const Text('Video Player', style: TextStyle(color: Colors.white)),
+            IconButton(
+              icon: Icon(
+                _isFullscreen ? Icons.fullscreen_exit : Icons.fullscreen,
+                color: Colors.white,
+                size: 24,
               ),
+              onPressed: _toggleFullscreen,
+            ),
           ],
         ),
-      )
-          : const Center(child: CircularProgressIndicator(color: Colors.white)),
+      ),
     );
   }
 }

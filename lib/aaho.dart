@@ -13,14 +13,14 @@ class Aaho extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Aaho',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       theme: ThemeData(
         brightness: Brightness.light,
         scaffoldBackgroundColor: AppTheme.colors.background,
         canvasColor: AppTheme.colors.background,
         cardColor: AppTheme.colors.card,
         primaryColor: AppTheme.colors.primary,
-        useMaterial3: false,
+        useMaterial3: true,
         appBarTheme: AppBarTheme(backgroundColor: AppTheme.colors.background, foregroundColor: AppTheme.colors.text, centerTitle: false),
       ),
       themeMode: ThemeMode.light,

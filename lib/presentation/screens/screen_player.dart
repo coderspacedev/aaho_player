@@ -1,16 +1,16 @@
+import 'package:aaho_player/extensions/video_metadata_helper.dart';
+
 import '../../aaho_exports.dart';
+import '../../models/video_metadata.dart';
 import '../widgets/advanced_video_player.dart';
 
-class ScreenPlayer extends StatefulWidget {
-  const ScreenPlayer({super.key});
+class ScreenPlayer extends StatelessWidget {
+  final VideoMetadata metadata;
 
-  @override
-  State<ScreenPlayer> createState() => _ScreenPlayerState();
-}
+  const ScreenPlayer({super.key, required this.metadata});
 
-class _ScreenPlayerState extends State<ScreenPlayer> {
   @override
   Widget build(BuildContext context) {
-    return AdvancedVideoPlayer(fileId: '12SpM1M3m1ZhZ6PwInv4Hhy9aIHJMiiuP');
+    return AdvancedVideoPlayer(videoUrl: metadata.videoUrl??'');
   }
 }
