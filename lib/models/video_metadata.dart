@@ -24,7 +24,7 @@ class VideoMetadata {
     final filteredFiles = filesList
         .where((f) {
       final name = f['name']?.toString().toLowerCase() ?? '';
-      return name.endsWith('.mp4') || name.endsWith('.jpg');
+      return name.endsWith('.mkv') ||name.endsWith('.mp4') || name.endsWith('.jpg');
     })
         .map((f) => FileItem.fromJson(f, json['server'], json['dir']))
         .toList();

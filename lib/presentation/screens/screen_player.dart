@@ -5,12 +5,12 @@ import '../../models/video_metadata.dart';
 import '../widgets/advanced_video_player.dart';
 
 class ScreenPlayer extends StatelessWidget {
-  final VideoMetadata metadata;
+  final String videoUrl;
 
-  const ScreenPlayer({super.key, required this.metadata});
+  const ScreenPlayer({super.key, required this.videoUrl});
 
   @override
   Widget build(BuildContext context) {
-    return AdvancedVideoPlayer(videoUrl: /*metadata.videoUrl??*/'https://archive.org/download/s-01-jamnapaar-720p-by-aaho/EP.1.2.3.4.5.Jamnapaar.S01.720p%20by%20Aaho.mkv');
+    return AdvancedVideoPlayer(videoUrl: videoUrl ?? '');
   }
 }

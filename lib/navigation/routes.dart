@@ -29,7 +29,7 @@ final appRoutes = <RouteConfig>[
     name: AppRoutes.player,
     pattern: AppRoutes.player,
     builder: (context, params) {
-      return ScreenPlayer(metadata: params['source'] as VideoMetadata);
+      return ScreenPlayer(videoUrl:params['videoUrl'] as String);
     },
   ),
 ];

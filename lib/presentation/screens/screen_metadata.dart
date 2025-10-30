@@ -31,69 +31,175 @@ class ScreenMetadata extends StatelessWidget {
               );
             } else if (state is VideoMetadataLoaded) {
               final metadata = state.videoMetadata;
+              final isSeries = (videoObject.type?.toLowerCase() == 'series');
+              final seasons = videoObject.seasons ?? [];
+
               return Padding(
                 padding: EdgeInsets.all(context.scale(16)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: CoderContainer(
-                        decoration: BoxDecoration(
-                          color: AppTheme.colors.card,
-                          borderRadius: BorderRadius.circular(context.scale(12)),
-                        ),
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(context.scale(12)),
-                              child: Image.network(
-                                metadata?.thumbnailUrl ?? '',
-                                width: context.screenWidth,
-                                fit: BoxFit.cover,
-                                loadingBuilder: (context, child, progress) {
-                                  if (progress == null) return child;
-                                  return Center(child: CircularProgressIndicator(strokeWidth: context.scale(2)));
-                                },
-                                errorBuilder: (_, __, ___) => Container(
-                                  color: AppTheme.colors.card,
-                                  child: Icon(Icons.broken_image, color: AppTheme.colors.cardText),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: CoderContainer(
+                          decoration: BoxDecoration(color: AppTheme.colors.card, borderRadius: BorderRadius.circular(context.scale(12))),
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(context.scale(12)),
+                                child: Image.network(
+                                  metadata?.thumbnailUrl ?? '',
+                                  width: context.screenWidth,
+                                  fit: BoxFit.cover,
+                                  loadingBuilder: (context, child, progress) {
+                                    if (progress == null) return child;
+                                    return Center(child: CircularProgressIndicator(strokeWidth: context.scale(2)));
+                                  },
+                                  errorBuilder: (_, __, ___) => Container(
+                                    color: AppTheme.colors.card,
+                                    child: Icon(Icons.broken_image, color: AppTheme.colors.cardText),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Positioned(
-                              right: context.scale(8),
-                              bottom: context.scale(8),
-                              child: CoderButton(
-                                text: 'Preview',
-                                height: context.scale(24),
-                                style: context.bodyBoldSmall.copyWith(color: Colors.white),
-                                paddingH: context.scale(12),
-                                backgroundColor: Colors.black38,
-                                icon: Icon(Icons.remove_red_eye_rounded, color: Colors.white, size: context.scale(12)),
-                                onPressed: () {},
+                              Positioned(
+                                right: context.scale(8),
+                                bottom: context.scale(8),
+                                child: CoderButton(
+                                  text: 'Preview',
+                                  height: context.scale(24),
+                                  style: context.bodyBoldSmall.copyWith(color: Colors.white),
+                                  paddingH: context.scale(12),
+                                  backgroundColor: Colors.black38,
+                                  icon: Icon(Icons.remove_red_eye_rounded, color: Colors.white, size: context.scale(12)),
+                                  onPressed: () {},
+                                ),
                               ),
-                            )
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: context.scale(12)),
-                    Text(videoObject.title ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: context.headline5),
-                    Text(videoObject.type ?? '', style: context.bodyMedium.copyWith(color: AppTheme.colors.accent)),
-                    Text(metadata?.description ?? '', style: context.bodySmall.copyWith(color: AppTheme.colors.text.withAlpha(127))),
-                    SizedBox(height: context.scale(12)),
-                    CoderButton(
-                      text: 'Play',
-                      width: double.infinity,
-                      radius: context.scale(24),
-                      style: context.bodyBoldLarge.copyWith(color: AppTheme.colors.accentText),
-                      icon: Icon(Icons.play_arrow_rounded, size: context.scale(24), color: AppTheme.colors.accentText),
-                      onPressed: () {
-                        context.navigateToObject(AppRoutes.player, {'source': metadata});
-                      },
-                    )
-                  ],
+
+                      SizedBox(height: context.scale(12)),
+                      Text(metadata?.title ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: context.headline5),
+                      Text(videoObject.type ?? '', style: context.bodyMedium.copyWith(color: AppTheme.colors.accent)),
+                      if (metadata?.description.isNotEmpty ?? false)
+                        Text(metadata?.description ?? '', style: context.bodySmall.copyWith(color: AppTheme.colors.text.withAlpha(127))),
+                      SizedBox(height: context.scale(12)),
+
+                      if (!isSeries)
+                        CoderButton(
+                          text: 'Play',
+                          width: double.infinity,
+                          radius: context.scale(24),
+                          style: context.bodyBoldLarge.copyWith(color: AppTheme.colors.accentText),
+                          icon: Icon(Icons.play_arrow_rounded, size: context.scale(24), color: AppTheme.colors.accentText),
+                          onPressed: () {
+                            final videoUrl = metadata?.videoUrl;
+                            if (videoUrl != null) {
+                              context.navigateToObject(AppRoutes.player, {'videoUrl': videoUrl});
+                            }
+                          },
+                        ),
+
+                      if (isSeries && seasons.isNotEmpty) ...[
+                        SizedBox(height: context.scale(12)),
+                        Text("Episodes", style: context.headline5),
+                        SizedBox(height: context.scale(8)),
+
+                        for (final season in seasons) ...[
+                          Text(
+                            season.seasonTitle ?? 'Season ${season.seasonNumber}',
+                            style: context.bodyBoldMedium.copyWith(color: AppTheme.colors.accent),
+                          ),
+                          SizedBox(height: context.scale(8)),
+
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: season.episodes?.length ?? 0,
+                            separatorBuilder: (_, __) => Padding(
+                              padding: EdgeInsets.symmetric(vertical: context.scale(4)),
+                              child: Divider(
+                                color: AppTheme.colors.cardText.withAlpha(50),
+                                thickness: 0.6,
+                                height: context.scale(8),
+                              ),
+                            ),
+                            itemBuilder: (context, index) {
+                              final episode = season.episodes![index];
+                              final mkvFiles = (metadata?.files ?? []).where((f) => f.name.toLowerCase().endsWith('.mkv')).toList();
+
+                              return InkWell(
+                                onTap: () {
+                                  if (mkvFiles.isEmpty) {
+                                    ScaffoldMessenger.of(context).clearSnackBars();
+                                    final snackBar = SnackBar(content: Text('No video files found'), backgroundColor: Colors.black54);
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                    return;
+                                  }
+
+                                  final file = index < mkvFiles.length ? mkvFiles[index] : mkvFiles.last;
+                                  final url = "https://archive.org/download/${videoObject.identifier}/${Uri.encodeComponent(file.name)}";
+
+                                  context.navigateToObject(AppRoutes.player, {'videoUrl': url});
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: context.scale(6)),
+                                  child: Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(context.scale(6)),
+                                        child: Image.network(
+                                          metadata?.thumbnailUrl ?? '',
+                                          width: context.scale(60),
+                                          height: context.scale(40),
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) => Container(
+                                            width: context.scale(60),
+                                            height: context.scale(40),
+                                            color: AppTheme.colors.card,
+                                            child: Icon(Icons.broken_image, color: AppTheme.colors.cardText, size: context.scale(16)),
+                                          ),
+                                          loadingBuilder: (context, child, loadingProgress) {
+                                            if (loadingProgress == null) return child;
+                                            return Container(
+                                              width: context.scale(60),
+                                              height: context.scale(40),
+                                              alignment: Alignment.center,
+                                              child: SizedBox(
+                                                width: context.scale(16),
+                                                height: context.scale(16),
+                                                child: CircularProgressIndicator(strokeWidth: context.scale(2)),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+
+                                      SizedBox(width: context.scale(8)),
+                                      Expanded(
+                                        child: Text(
+                                          episode.title ?? 'Episode ${index + 1}',
+                                          style: context.bodyLarge,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+
+                                      SizedBox(width: context.scale(8)),
+                                      Icon(Icons.play_circle_outline, color: AppTheme.colors.accent),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+
+                          SizedBox(height: context.scale(12)),
+                        ],
+                      ],
+                    ],
+                  ),
                 ),
               );
             }

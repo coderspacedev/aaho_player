@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../models/video_metadata.dart';
 
 extension VideoMetadataHelper on VideoMetadata {
