@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:aaho_player/aaho_exports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
@@ -33,7 +34,7 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
     _player = Player();
     _controller = VideoController(_player);
     _initializePlayer();
-    // _startHideTimer(0);
+    _startHideTimer(0);
   }
 
   Future<void> _initializePlayer() async {
@@ -51,7 +52,7 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
 
   void _showAndHideControls() {
     setState(() => _showControls = true);
-    // _startHideTimer();
+    _startHideTimer();
   }
 
   void _toggleFullscreen() {
@@ -143,22 +144,22 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            // onTap: () {
-            //   if (_showControls) {
-            //     _startHideTimer();
-            //   } else {
-            //     _showAndHideControls();
-            //   }
-            // },
-            // onDoubleTapDown: _handleDoubleTapDown,
-            // onVerticalDragStart: _handleVerticalDragStart,
-            // onVerticalDragUpdate: _handleVerticalDragUpdate,
-            // onVerticalDragEnd: _handleVerticalDragEnd,
-            child: Center(
-              child: IgnorePointer(
-                ignoring: _showControls,
+          IgnorePointer(
+            ignoring: _showControls,
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                if (_showControls) {
+                  _startHideTimer();
+                } else {
+                  _showAndHideControls();
+                }
+              },
+              onDoubleTapDown: _handleDoubleTapDown,
+              onVerticalDragStart: _handleVerticalDragStart,
+              onVerticalDragUpdate: _handleVerticalDragUpdate,
+              onVerticalDragEnd: _handleVerticalDragEnd,
+              child: Center(
                 child: Video(controller: _controller, fit: BoxFit.contain, controls: NoVideoControls),
               ),
             ),
@@ -177,7 +178,7 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
 
   Widget _buildTopBar(BuildContext context, Orientation orientation) {
     return Container(
-      height: orientation == Orientation.portrait ? 56 : 40,
+      // height: orientation == Orientation.portrait ? 56 : 40,
       decoration: const BoxDecoration(
         gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black87, Colors.transparent]),
       ),
@@ -190,7 +191,7 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () => Navigator.pop(context),
             ),
-            if (orientation == Orientation.portrait) const Text('Video Player', style: TextStyle(color: Colors.white)),
+            if (orientation == Orientation.portrait) Text('Video Player', style: context.bodyBoldLarge.copyWith(color: Colors.white)),
             IconButton(
               icon: Icon(_isFullscreen ? Icons.fullscreen_exit : Icons.fullscreen, color: Colors.white),
               onPressed: _toggleFullscreen,
