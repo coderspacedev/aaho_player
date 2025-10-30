@@ -74,7 +74,7 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
           ),
           SizedBox(height: context.scale(12)),
           SizedBox(
-            height: context.screenWidth * 0.32,
+            height: context.screenWidth * 0.44,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: category.items?.length ?? 0,
@@ -84,7 +84,9 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
                 final movie = category.items?[index];
                 return GestureDetector(
                   onTap: () {
-                    context.navigateToObject(AppRoutes.metadata, {'source': movie});
+                    context.navigateToObject(AppRoutes.metadata, {
+                      'source': movie,
+                    });
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,11 +94,13 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(context.scale(12)),
                         child: Container(
-                          width: context.screenWidth * 0.38,
-                          height: context.screenWidth * 0.23,
+                          width: context.screenWidth * 0.25,
+                          height: context.screenWidth * 0.35,
                           color: AppTheme.colors.card,
                           child: Image.network(
-                            movie?.thumbnailUrl ?? '',
+                            (movie?.thumbnail == null)
+                                ? movie?.thumbnailUrl ?? ''
+                                : '${movie?.thumbnailParentUrl}${movie?.thumbnail}',
                             fit: BoxFit.cover,
                             loadingBuilder: (context, child, progress) {
                               if (progress == null) return child;
@@ -118,12 +122,12 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
                       ),
                       SizedBox(height: context.scale(8)),
                       SizedBox(
-                        width: context.screenWidth * 0.35,
+                        width: context.screenWidth * 0.25,
                         child: Text(
                           movie?.title ?? '',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: context.bodySmall,
+                          style: context.caption,
                         ),
                       ),
                       Text(

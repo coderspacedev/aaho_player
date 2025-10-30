@@ -30,12 +30,14 @@ class VideoObject {
   String? identifier;
   String? title;
   String? type;
+  String? thumbnail;
   List<SeasonObject>? seasons;
 
   VideoObject({
     this.identifier,
     this.title,
     this.type,
+    this.thumbnail,
     this.seasons,
   });
 
@@ -44,6 +46,7 @@ class VideoObject {
       identifier: json['identifier'],
       title: json['title'],
       type: json['type'],
+      thumbnail: json['thumbnail'],
       seasons: (json['seasons'] as List?)
           ?.map((e) => SeasonObject.fromJson(e))
           .toList(),
@@ -54,11 +57,15 @@ class VideoObject {
     'identifier': identifier,
     'title': title,
     'type': type,
+    'thumbnail': thumbnail,
     'seasons': seasons?.map((e) => e.toJson()).toList(),
   };
 
   String get thumbnailUrl =>
       "https://archive.org/download/$identifier/__ia_thumb.jpg";
+
+  String get thumbnailParentUrl =>
+      "https://archive.org/download/$identifier/";
   String? get videoUrl {
     if (type?.toLowerCase() == "movie" && identifier != null && title != null) {
       return "https://archive.org/download/$identifier/${title?.replaceAll(' ', '%20')}.mkv";
