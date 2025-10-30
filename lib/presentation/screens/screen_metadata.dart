@@ -16,9 +16,7 @@ class ScreenMetadata extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          VideoMetadataCubit()
-            ..fetchVideoMetadata(videoObject.identifier ?? ''),
+      create: (context) => VideoMetadataCubit()..fetchVideoMetadata(videoObject.identifier ?? ''),
       child: Scaffold(
         appBar: CoderBar(title: 'Aaho', isBack: true),
         body: BlocBuilder<VideoMetadataCubit, VideoMetadataState>(
@@ -28,10 +26,7 @@ class ScreenMetadata extends StatelessWidget {
                 child: SizedBox(
                   width: context.scale(24),
                   height: context.scale(24),
-                  child: CircularProgressIndicator(
-                    color: AppTheme.colors.accent,
-                    strokeWidth: context.scale(4),
-                  ),
+                  child: CircularProgressIndicator(color: AppTheme.colors.accent, strokeWidth: context.scale(4)),
                 ),
               );
             } else if (state is VideoMetadataLoaded) {
@@ -41,79 +36,63 @@ class ScreenMetadata extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(context.scale(12)),
-                      child: Image.network(
-                        metadata?.thumbnailUrl ?? '',
-                        width: context.screenWidth,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, progress) {
-                          if (progress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: context.scale(2),
-                            ),
-                          );
-                        },
-                        errorBuilder: (_, __, ___) => Container(
+                    AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: CoderContainer(
+                        decoration: BoxDecoration(
                           color: AppTheme.colors.card,
-                          child: Icon(
-                            Icons.broken_image,
-                            color: AppTheme.colors.cardText,
-                          ),
+                          borderRadius: BorderRadius.circular(context.scale(12)),
+                        ),
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(context.scale(12)),
+                              child: Image.network(
+                                metadata?.thumbnailUrl ?? '',
+                                width: context.screenWidth,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, progress) {
+                                  if (progress == null) return child;
+                                  return Center(child: CircularProgressIndicator(strokeWidth: context.scale(2)));
+                                },
+                                errorBuilder: (_, __, ___) => Container(
+                                  color: AppTheme.colors.card,
+                                  child: Icon(Icons.broken_image, color: AppTheme.colors.cardText),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: context.scale(8),
+                              bottom: context.scale(8),
+                              child: CoderButton(
+                                text: 'Preview',
+                                height: context.scale(24),
+                                style: context.bodyBoldSmall.copyWith(color: Colors.white),
+                                paddingH: context.scale(12),
+                                backgroundColor: Colors.black38,
+                                icon: Icon(Icons.remove_red_eye_rounded, color: Colors.white, size: context.scale(12)),
+                                onPressed: () {},
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
                     SizedBox(height: context.scale(12)),
-                    Text(
-                      videoObject.title ?? '',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.headline5,
-                    ),
-                    Text(
-                      videoObject.type ?? '',
-                      style: context.bodyMedium.copyWith(
-                        color: AppTheme.colors.accent,
-                      ),
-                    ),
+                    Text(videoObject.title ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: context.headline5),
+                    Text(videoObject.type ?? '', style: context.bodyMedium.copyWith(color: AppTheme.colors.accent)),
+                    Text(metadata?.description ?? '', style: context.bodySmall.copyWith(color: AppTheme.colors.text.withAlpha(127))),
                     SizedBox(height: context.scale(12)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CoderButton(
-                            text: 'Preview',
-                            style: context.bodyBoldLarge,
-                            backgroundColor: AppTheme.colors.card,
-                            icon: Icon(
-                              Icons.remove_red_eye_rounded,
-                              color: AppTheme.colors.text,
-                              size: context.scale(24),
-                            ),
-                            onPressed: () {},
-                          ),
-                        ),
-                        SizedBox(width: context.scale(12)),
-                        Expanded(
-                          child: CoderButton(
-                            text: 'Play',
-                            style: context.bodyBoldLarge.copyWith(
-                              color: AppTheme.colors.accentText,
-                            ),
-                            icon: Icon(
-                              Icons.play_arrow_rounded,
-                              size: context.scale(24),
-                              color: AppTheme.colors.accentText,
-                            ),
-                            onPressed: () {
-                              context.navigateToObject(AppRoutes.player, {
-                                'source': metadata,
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                    CoderButton(
+                      text: 'Play',
+                      width: double.infinity,
+                      radius: context.scale(24),
+                      style: context.bodyBoldLarge.copyWith(color: AppTheme.colors.accentText),
+                      icon: Icon(Icons.play_arrow_rounded, size: context.scale(24), color: AppTheme.colors.accentText),
+                      onPressed: () {
+                        context.navigateToObject(AppRoutes.player, {'source': metadata});
+                      },
+                    )
                   ],
                 ),
               );

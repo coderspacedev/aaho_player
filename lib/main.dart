@@ -1,8 +1,11 @@
 import 'package:aaho_player/aaho.dart';
+import 'package:media_kit/media_kit.dart';
 
 import 'aaho_exports.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MediaKit.ensureInitialized();
   AppTheme.setLightColors(
     CoderColor(
       primary: Color(0xFFFFFFFF),

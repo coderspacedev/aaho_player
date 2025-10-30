@@ -74,7 +74,7 @@ class _ScreenDashboardState extends State<ScreenDashboard> {
           ),
           SizedBox(height: context.scale(12)),
           SizedBox(
-            height: context.screenWidth * 0.3,
+            height: context.screenWidth * 0.32,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: category.items?.length ?? 0,

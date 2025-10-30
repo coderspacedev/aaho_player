@@ -11,6 +11,6 @@ class ScreenPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdvancedVideoPlayer(videoUrl: metadata.videoUrl??'');
+    return AdvancedVideoPlayer(videoUrl: /*metadata.videoUrl??*/'https://archive.org/download/s-01-jamnapaar-720p-by-aaho/EP.1.2.3.4.5.Jamnapaar.S01.720p%20by%20Aaho.mkv');
   }
 }
