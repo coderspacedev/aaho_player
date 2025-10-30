@@ -204,8 +204,7 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
           ),
 
           if (_isInitialized &&
-              _showControls &&
-              orientation == Orientation.portrait)
+              _showControls)
             _buildCenterControls(),
           if (_isInitialized && _showControls && _isDragging)
             Positioned(
