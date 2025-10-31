@@ -137,35 +137,35 @@ class ScreenMetadata extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.black, Colors.black45, Colors.transparent, Colors.transparent, Colors.transparent, Colors.transparent],
-                        ),
-                      ),
-                      child: CoderBar(
-                        title: '',
-                        isBack: true,
-                        backgroundColor: Colors.transparent,
-                        iconColor: Colors.white,
-                        actions: [
-                          Padding(
-                            padding: EdgeInsets.only(right: context.scale(12)),
-                            child: CoderButton(
-                              text: 'Preview',
-                              height: context.scale(24),
-                              style: context.bodyBoldSmall.copyWith(color: Colors.white),
-                              paddingH: context.scale(12),
-                              backgroundColor: Colors.black38,
-                              icon: Icon(Icons.remove_red_eye_rounded, color: Colors.white, size: context.scale(12)),
-                              onPressed: () {},
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //     gradient: LinearGradient(
+                    //       begin: Alignment.topCenter,
+                    //       end: Alignment.bottomCenter,
+                    //       colors: [Colors.black, Colors.black45, Colors.transparent, Colors.transparent, Colors.transparent, Colors.transparent],
+                    //     ),
+                    //   ),
+                    //   child: CoderBar(
+                    //     title: '',
+                    //     isBack: true,
+                    //     backgroundColor: Colors.transparent,
+                    //     iconColor: Colors.white,
+                    //     actions: [
+                    //       Padding(
+                    //         padding: EdgeInsets.only(right: context.scale(12)),
+                    //         child: CoderButton(
+                    //           text: 'Preview',
+                    //           height: context.scale(24),
+                    //           style: context.bodyBoldSmall.copyWith(color: Colors.white),
+                    //           paddingH: context.scale(12),
+                    //           backgroundColor: Colors.black38,
+                    //           icon: Icon(Icons.remove_red_eye_rounded, color: Colors.white, size: context.scale(12)),
+                    //           onPressed: () {},
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 );
               }
