@@ -1,1 +1,110 @@
-[{"id":"1","category_title":"Gujarati Movies","items":[{"identifier":"how.to.-trian.-your.-dragon.-2025.720p.-aaho","title":"How to Train Your Dragon 2025","thumbnail":"76VGBmSQZxLM9n7TLsz3XfZLAt6.webp","type":"Movie"},{"identifier":"s-01-jamnapaar-720p-by-aaho","title":"Jamnapaar S1 (2024)","type":"Series","seasons":[{"season_number":1,"season_title":"Season 1","episodes":[{"episode_number":1,"title":"EP.1.2.3.4.5","identifier":"s-01-jamnapaar-720p-by-aaho"},{"episode_number":2,"title":"EP.6.7.8.9.10","identifier":"s-01-jamnapaar-720p-by-aaho"}]}]},{"identifier":"how.to.-trian.-your.-dragon.-2025.720p.-aaho","title":"How to Train Your Dragon 2025","thumbnail":"76VGBmSQZxLM9n7TLsz3XfZLAt6.webp","type":"Movie"},{"identifier":"how.to.-trian.-your.-dragon.-2025.720p.-aaho","title":"How to Train Your Dragon 2025","thumbnail":"76VGBmSQZxLM9n7TLsz3XfZLAt6.webp","type":"Movie"},{"identifier":"how.to.-trian.-your.-dragon.-2025.720p.-aaho","title":"How to Train Your Dragon 2025","thumbnail":"76VGBmSQZxLM9n7TLsz3XfZLAt6.webp","type":"Movie"}]},{"id":"2","category_title":"Bollywood Movies","items":[{"identifier":"how.to.-trian.-your.-dragon.-2025.720p.-aaho","title":"How to Train Your Dragon 2025","thumbnail":"76VGBmSQZxLM9n7TLsz3XfZLAt6.webp","type":"Movie"},{"identifier":"s-01-jamnapaar-720p-by-aaho","title":"Jamnapaar S1 (2024)","type":"Series","seasons":[{"season_number":1,"season_title":"Season 1","episodes":[{"episode_number":1,"title":"EP.1.2.3.4.5","identifier":"s-01-jamnapaar-720p-by-aaho"},{"episode_number":2,"title":"EP.6.7.8.9.10","identifier":"s-01-jamnapaar-720p-by-aaho"}]}]},{"identifier":"how.to.-trian.-your.-dragon.-2025.720p.-aaho","title":"How to Train Your Dragon 2025","thumbnail":"76VGBmSQZxLM9n7TLsz3XfZLAt6.webp","type":"Movie"},{"identifier":"how.to.-trian.-your.-dragon.-2025.720p.-aaho","title":"How to Train Your Dragon 2025","thumbnail":"76VGBmSQZxLM9n7TLsz3XfZLAt6.webp","type":"Movie"},{"identifier":"how.to.-trian.-your.-dragon.-2025.720p.-aaho","title":"How to Train Your Dragon 2025","thumbnail":"76VGBmSQZxLM9n7TLsz3XfZLAt6.webp","type":"Movie"}]}]
+[
+  {
+    "id": "1",
+    "category_title": "Gujarati Movies",
+    "items": [
+      {
+        "identifier": "how.to.-trian.-your.-dragon.-2025.720p.-aaho",
+        "title": "How to Train Your Dragon 2025",
+        "thumbnail": "76VGBmSQZxLM9n7TLsz3XfZLAt6.webp",
+        "type": "Movie"
+      },
+      {
+        "identifier": "s-01-jamnapaar-720p-by-aaho",
+        "title": "Jamnapaar S1 (2024)",
+        "thumbnail": "kZ0HuEVsuvJ259NgfOkWklwWyAO.webp",
+        "type": "Series",
+        "seasons": [
+          {
+            "season_number": 1,
+            "season_title": "Season 1",
+            "episodes": [
+              {
+                "episode_number": 1,
+                "title": "EP.1.2.3.4.5",
+                "identifier": "s-01-jamnapaar-720p-by-aaho"
+              },
+              {
+                "episode_number": 2,
+                "title": "EP.6.7.8.9.10",
+                "identifier": "s-01-jamnapaar-720p-by-aaho"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "identifier": "how.to.-trian.-your.-dragon.-2025.720p.-aaho",
+        "title": "How to Train Your Dragon 2025",
+        "thumbnail": "76VGBmSQZxLM9n7TLsz3XfZLAt6.webp",
+        "type": "Movie"
+      },
+      {
+        "identifier": "how.to.-trian.-your.-dragon.-2025.720p.-aaho",
+        "title": "How to Train Your Dragon 2025",
+        "thumbnail": "76VGBmSQZxLM9n7TLsz3XfZLAt6.webp",
+        "type": "Movie"
+      },
+      {
+        "identifier": "how.to.-trian.-your.-dragon.-2025.720p.-aaho",
+        "title": "How to Train Your Dragon 2025",
+        "thumbnail": "76VGBmSQZxLM9n7TLsz3XfZLAt6.webp",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "category_title": "Bollywood Movies",
+    "items": [
+      {
+        "identifier": "how.to.-trian.-your.-dragon.-2025.720p.-aaho",
+        "title": "How to Train Your Dragon 2025",
+        "thumbnail": "76VGBmSQZxLM9n7TLsz3XfZLAt6.webp",
+        "type": "Movie"
+      },
+      {
+        "identifier": "s-01-jamnapaar-720p-by-aaho",
+        "title": "Jamnapaar S1 (2024)",
+        "thumbnail": "kZ0HuEVsuvJ259NgfOkWklwWyAO.webp",
+        "type": "Series",
+        "seasons": [
+          {
+            "season_number": 1,
+            "season_title": "Season 1",
+            "episodes": [
+              {
+                "episode_number": 1,
+                "title": "EP.1.2.3.4.5",
+                "identifier": "s-01-jamnapaar-720p-by-aaho"
+              },
+              {
+                "episode_number": 2,
+                "title": "EP.6.7.8.9.10",
+                "identifier": "s-01-jamnapaar-720p-by-aaho"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "identifier": "how.to.-trian.-your.-dragon.-2025.720p.-aaho",
+        "title": "How to Train Your Dragon 2025",
+        "thumbnail": "76VGBmSQZxLM9n7TLsz3XfZLAt6.webp",
+        "type": "Movie"
+      },
+      {
+        "identifier": "how.to.-trian.-your.-dragon.-2025.720p.-aaho",
+        "title": "How to Train Your Dragon 2025",
+        "thumbnail": "76VGBmSQZxLM9n7TLsz3XfZLAt6.webp",
+        "type": "Movie"
+      },
+      {
+        "identifier": "how.to.-trian.-your.-dragon.-2025.720p.-aaho",
+        "title": "How to Train Your Dragon 2025",
+        "thumbnail": "76VGBmSQZxLM9n7TLsz3XfZLAt6.webp",
+        "type": "Movie"
+      }
+    ]
+  }
+]

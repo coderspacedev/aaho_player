@@ -61,6 +61,10 @@ class _AdvancedVideoPlayerState extends State<AdvancedVideoPlayer> {
     await _player.play();
     Future.delayed(const Duration(milliseconds: 200), () {
       if (mounted) setState(() {});
+      final audioTracks = _player.state.tracks.audio;
+      for (var track in audioTracks) {
+        debugPrint('Audio Track: ${track.id} | ${track.language} | ${track.title}');
+      }
     });
   }
 
